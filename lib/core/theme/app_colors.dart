@@ -39,6 +39,16 @@ class AppColors {
   static const Color navInactive = Color(0xFFB0B0C0);
   static const Color navBackground = Color(0xFFFFFFFF);
 
+  // ── Network providers ─────────────────────────────────────────
+  static const Color mtnYellow = Color(0xFFFFCC00);
+  static const Color mtnYellowDark = Color(0xFFE5B800);
+  static const Color gloGreen = Color(0xFF00A651);
+  static const Color gloGreenDark = Color(0xFF008C44);
+  static const Color airtelRed = Color(0xFFED1C24);
+  static const Color airtelRedDark = Color(0xFFCC1218);
+  static const Color nineMobileGreen = Color(0xFF006B3F);
+  static const Color nineMobileGreenDark = Color(0xFF005230);
+
   // ── Shadows ─────────────────────────────────────────────────────
   static const Color shadowSoft = Color(0x0D000000);
   static const Color shadowMedium = Color(0x14000000);

@@ -9,8 +9,6 @@ import 'request_money_screen.dart';
 import 'scan_qr_screen.dart';
 import 'transaction_detail_screen.dart';
 
-/// "Transfers" bottom-nav tab: quick contacts, Send/Request/Scan actions,
-/// and a scrollable transaction history.
 class TransfersScreen extends StatelessWidget {
   const TransfersScreen({super.key});
 
@@ -78,84 +76,26 @@ class TransfersScreen extends StatelessWidget {
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.md,
-                AppSpacing.lg,
-                0,
-              ),
-              sliver: SliverToBoxAdapter(
-                child: Text('Transfers', style: AppTextStyles.sectionTitle.copyWith(fontSize: 22)),
-              ),
+            SliverToBoxAdapter(
+              child: _buildHeader(context),
             ),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.lg,
-                AppSpacing.lg,
-                0,
-              ),
+              padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.sm),
               sliver: SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _ActionCard(
-                        icon: Iconsax.arrow_right_3,
-                        label: 'Send',
-                        color: AppColors.sendGreen,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const SendMoneyScreen()),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: _ActionCard(
-                        icon: Iconsax.arrow_swap,
-                        label: 'Request',
-                        color: AppColors.primaryPurple,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const RequestMoneyScreen()),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: _ActionCard(
-                        icon: Iconsax.scan_barcode,
-                        label: 'Scan QR',
-                        color: AppColors.businessNavy,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const ScanQrScreen()),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.xl,
-                AppSpacing.lg,
-                AppSpacing.sm,
-              ),
-              sliver: SliverToBoxAdapter(
-                child: Text('Quick contacts', style: AppTextStyles.sectionTitle.copyWith(fontSize: 15)),
+                child: Text('Saved beneficiaries', style: AppTextStyles.sectionTitle.copyWith(fontSize: 15)),
               ),
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 84,
+                height: 90,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                  itemCount: _contacts.length,
+                  itemCount: _contacts.length + 1,
                   separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.md),
                   itemBuilder: (context, i) {
-                    final c = _contacts[i];
+                    if (i == 0) return _addBeneficiaryButton(context);
+                    final c = _contacts[i - 1];
                     return GestureDetector(
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const SendMoneyScreen()),
@@ -175,7 +115,7 @@ class TransfersScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          Text(c.name, style: AppTextStyles.rowValueMuted),
+                          Text(c.name, style: AppTextStyles.rowValueMuted.copyWith(fontSize: 11)),
                         ],
                       ),
                     );
@@ -184,26 +124,26 @@ class TransfersScreen extends StatelessWidget {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.xl,
-                AppSpacing.lg,
-                AppSpacing.sm,
-              ),
+              padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.md, AppSpacing.lg, AppSpacing.sm),
               sliver: SliverToBoxAdapter(
-                child: Text('Recent activity', style: AppTextStyles.sectionTitle.copyWith(fontSize: 15)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Recent activity', style: AppTextStyles.sectionTitle.copyWith(fontSize: 15)),
+                    Text('See all', style: AppTextStyles.rowValueMuted.copyWith(
+                      color: AppColors.primaryPurple,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    )),
+                  ],
+                ),
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                0,
-                AppSpacing.lg,
-                AppSpacing.xxl,
-              ),
+              padding: const EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.xxl),
               sliver: SliverList.separated(
                 itemCount: _history.length,
-                separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+                separatorBuilder: (_, __) => const SizedBox(height: 2),
                 itemBuilder: (context, i) => _TransactionRow(model: _history[i]),
               ),
             ),
@@ -212,18 +152,182 @@ class TransfersScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.md, AppSpacing.lg, 0),
+      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.xl, AppSpacing.lg, AppSpacing.lg),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [AppColors.primaryPurpleDeep, AppColors.primaryPurpleDark],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryPurple.withOpacity(0.25),
+            blurRadius: 24,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            right: -20,
+            top: -20,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.06),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 30,
+            top: 30,
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.04),
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Available Balance',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.55),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '₦2,450.75',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
+                    ),
+                    child: const Icon(
+                      Iconsax.eye,
+                      size: 19,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.10),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Row(
+                children: [
+                  Expanded(
+                    child: _HeaderAction(
+                      icon: Iconsax.arrow_right_3,
+                      label: 'Send',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const SendMoneyScreen()),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _HeaderAction(
+                      icon: Iconsax.arrow_down,
+                      label: 'Receive',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const RequestMoneyScreen()),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _HeaderAction(
+                      icon: Iconsax.scan_barcode,
+                      label: 'Scan QR',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const ScanQrScreen()),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _addBeneficiaryButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const SendMoneyScreen()),
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: AppColors.primaryPurple.withOpacity(0.10),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: AppColors.primaryPurple.withOpacity(0.3),
+                width: 1.5,
+              ),
+            ),
+            child: const Icon(Iconsax.add, size: 20, color: AppColors.primaryPurple),
+          ),
+          const SizedBox(height: 6),
+          Text('Add new', style: AppTextStyles.rowValueMuted.copyWith(fontSize: 11)),
+        ],
+      ),
+    );
+  }
 }
 
-class _ActionCard extends StatelessWidget {
+class _HeaderAction extends StatelessWidget {
   final IconData icon;
   final String label;
-  final Color color;
   final VoidCallback onTap;
 
-  const _ActionCard({
+  const _HeaderAction({
     required this.icon,
     required this.label,
-    required this.color,
     required this.onTap,
   });
 
@@ -232,25 +336,36 @@ class _ActionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: AppColors.cardSurface,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          boxShadow: const [
-            BoxShadow(color: AppColors.shadowSoft, blurRadius: 14, offset: Offset(0, 6)),
-          ],
+          color: Colors.white.withOpacity(0.10),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.08),
+            width: 0.5,
+          ),
         ),
         child: Column(
           children: [
             Container(
-              width: 38,
-              height: 38,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-              child: Icon(icon, size: 18, color: Colors.white),
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(9),
+              ),
+              child: Icon(icon, size: 17, color: Colors.white),
             ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(label, style: AppTextStyles.rowValueMuted),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 11.5,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.2,
+              ),
+            ),
           ],
         ),
       ),
@@ -287,40 +402,41 @@ class _TransactionRow extends StatelessWidget {
         ),
       ),
       child: Container(
-      padding: const EdgeInsets.all(AppSpacing.sm),
-      decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: model.iconBackground,
-              borderRadius: BorderRadius.circular(AppRadius.xs),
+        margin: const EdgeInsets.only(bottom: 2),
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+        decoration: BoxDecoration(
+          color: AppColors.cardSurface,
+          borderRadius: BorderRadius.circular(AppRadius.sm),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: model.iconBackground,
+                borderRadius: BorderRadius.circular(AppRadius.xs),
+              ),
+              child: Icon(model.icon, size: 18, color: model.iconColor),
             ),
-            child: Icon(model.icon, size: 18, color: model.iconColor),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(model.title, style: AppTextStyles.rowTitle),
-                const SizedBox(height: 2),
-                Text(model.subtitle, style: AppTextStyles.rowSubtitle),
-              ],
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(model.title, style: AppTextStyles.rowTitle),
+                  const SizedBox(height: 2),
+                  Text(model.subtitle, style: AppTextStyles.rowSubtitle),
+                ],
+              ),
             ),
-          ),
-          Text(
-            '$sign₦$amountStr',
-            style: AppTextStyles.rowValue.copyWith(color: color, fontSize: 13.5),
-          ),
-        ],
-      ),
+            Text(
+              '$sign₦$amountStr',
+              style: AppTextStyles.rowValue.copyWith(color: color, fontSize: 13.5),
+            ),
+          ],
+        ),
       ),
     );
   }
