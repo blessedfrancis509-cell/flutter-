@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'app_colors.dart';
 
 /// Shared dimension tokens (radius, spacing, durations).
 class AppConstants {
