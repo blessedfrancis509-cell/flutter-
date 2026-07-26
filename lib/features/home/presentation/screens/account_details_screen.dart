@@ -74,7 +74,7 @@ class AccountDetailsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   for (int i = 0; i < _transactions.length; i++)
-                    _row(_transactions[i], showDivider: i != _transactions.length - 1),
+                    _row(context, _transactions[i], showDivider: i != _transactions.length - 1),
                 ],
               ),
             ),
@@ -107,7 +107,7 @@ class AccountDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _row(TransactionModel model, {required bool showDivider}) {
+  Widget _row(BuildContext context, TransactionModel model, {required bool showDivider}) {
     final isCredit = model.direction == TransactionDirection.credit;
     final sign = isCredit ? '+' : '-';
     final color = isCredit ? AppColors.investGreen : AppColors.textPrimary;
