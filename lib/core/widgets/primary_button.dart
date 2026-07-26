@@ -3,7 +3,8 @@ import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../constants/app_constants.dart';
 
-/// Full-width solid purple call-to-action button with press-scale feedback.
+/// Full-width solid purple call-to-action button with press-scale feedback
+/// and a premium metallic gradient.
 class PrimaryButton extends StatefulWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -37,22 +38,33 @@ class _PrimaryButtonState extends State<PrimaryButton> {
         scale: _scale,
         duration: AppDurations.press,
         child: Container(
-          height: 54,
+          height: 56,
           width: double.infinity,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppRadius.md),
             gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
               colors: enabled
-                  ? [AppColors.primaryPurpleLight, AppColors.primaryPurple]
+                  ? [
+                      AppColors.primaryPurpleLight,
+                      AppColors.primaryPurple,
+                      AppColors.primaryPurpleDark,
+                    ]
                   : [AppColors.textMuted, AppColors.textMuted],
             ),
             boxShadow: enabled
                 ? [
                     BoxShadow(
-                      color: AppColors.primaryPurple.withOpacity(0.35),
-                      blurRadius: 18,
+                      color: AppColors.primaryPurple.withOpacity(0.40),
+                      blurRadius: 20,
                       offset: const Offset(0, 8),
+                    ),
+                    BoxShadow(
+                      color: AppColors.primaryPurple.withOpacity(0.15),
+                      blurRadius: 36,
+                      offset: const Offset(0, 14),
                     ),
                   ]
                 : null,
@@ -75,10 +87,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                     ],
                     Text(
                       widget.label,
-                      style: AppTextStyles.rowTitle.copyWith(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
+                      style: AppTextStyles.buttonPrimary,
                     ),
                   ],
                 ),
@@ -88,8 +97,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
   }
 }
 
-/// Outlined / ghost variant, used for secondary actions next to a
-/// [PrimaryButton].
+/// Outlined / ghost variant for secondary actions.
 class SecondaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -113,7 +121,7 @@ class SecondaryButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppRadius.md),
           color: AppColors.cardSurfaceAlt,
-          border: Border.all(color: AppColors.dividerColor),
+          border: Border.all(color: AppColors.dividerColor, width: 1.2),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -122,7 +130,7 @@ class SecondaryButton extends StatelessWidget {
               Icon(icon, size: 18, color: AppColors.textPrimary),
               const SizedBox(width: AppSpacing.xs),
             ],
-            Text(label, style: AppTextStyles.rowTitle.copyWith(fontSize: 14)),
+            Text(label, style: AppTextStyles.buttonSecondary),
           ],
         ),
       ),

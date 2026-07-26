@@ -6,6 +6,8 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 
+/// Premium login screen with cinematic gradient, animated logo glow,
+/// and refined card with gold accent.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -22,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   late final AnimationController _animController;
   late final Animation<double> _fade;
   late final Animation<Offset> _slide;
+  late final AnimationController _glowController;
+  late final Animation<double> _glow;
 
   @override
   void initState() {
@@ -36,6 +40,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic));
     _animController.forward();
+
+    _glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..repeat(reverse: true);
+    _glow = Tween<double>(begin: 0.3, end: 0.7).animate(
+      CurvedAnimation(parent: _glowController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -43,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     _emailController.dispose();
     _passwordController.dispose();
     _animController.dispose();
+    _glowController.dispose();
     super.dispose();
   }
 
@@ -62,19 +75,44 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.primaryPurpleDeep,
       body: Stack(
         children: [
+          // Cinematic gradient background
           Container(
-            height: size.height * 0.42,
+            height: size.height,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: AppColors.headerGradient,
+                colors: AppColors.screenGradient,
               ),
             ),
           ),
+
+          // Radial glow behind logo
+          Positioned(
+            top: size.height * 0.05,
+            left: 0,
+            right: 0,
+            height: size.height * 0.35,
+            child: AnimatedBuilder(
+              animation: _glow,
+              builder: (_, __) => Container(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment.topCenter,
+                    radius: 0.7,
+                    colors: [
+                      AppColors.accentViolet.withOpacity(0.15 * _glow.value),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+
           SafeArea(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -84,11 +122,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   position: _slide,
                   child: Column(
                     children: [
-                      const SizedBox(height: AppSpacing.xxl),
+                      const SizedBox(height: AppSpacing.xxxl),
                       _buildLogo(),
                       const SizedBox(height: AppSpacing.xl),
                       _buildLoginCard(),
-                      const SizedBox(height: AppSpacing.lg),
+                      const SizedBox(height: AppSpacing.xl),
                       _buildFooter(),
                     ],
                   ),
@@ -104,40 +142,51 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   Widget _buildLogo() {
     return Column(
       children: [
-        Container(
-          width: 64,
-          height: 64,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [AppColors.sendGreen, AppColors.accentViolet],
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: AppColors.shadowSoft,
-                blurRadius: 20,
-                offset: Offset(0, 8),
+        AnimatedBuilder(
+          animation: _glow,
+          builder: (_, child) => Container(
+            width: 72,
+            height: 72,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.sendGreen, AppColors.accentViolet, AppColors.primaryPurple],
               ),
-            ],
-          ),
-          child: const Text(
-            'Z',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w900,
-              fontSize: 32,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.accentViolet.withOpacity(0.3 + 0.15 * _glow.value),
+                  blurRadius: 28 + 8 * _glow.value,
+                  offset: const Offset(0, 10),
+                ),
+                BoxShadow(
+                  color: AppColors.sendGreen.withOpacity(0.15 * _glow.value),
+                  blurRadius: 40,
+                  offset: const Offset(0, 14),
+                  spreadRadius: -4,
+                ),
+              ],
+            ),
+            child: const Text(
+              'Z',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+                fontSize: 36,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
-        Text('ZenCash', style: AppTextStyles.logo.copyWith(fontSize: 24)),
+        const SizedBox(height: AppSpacing.lg),
+        Text('ZenCash', style: AppTextStyles.logo.copyWith(fontSize: 28)),
         const SizedBox(height: AppSpacing.xs),
         Text(
           'Your digital banking partner',
-          style: AppTextStyles.rowSubtitle.copyWith(color: AppColors.textOnDarkMuted),
+          style: AppTextStyles.rowSubtitleLight.copyWith(
+            color: AppColors.textOnDarkMuted,
+          ),
         ),
       ],
     );
@@ -150,15 +199,25 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         padding: const EdgeInsets.all(AppSpacing.xl),
         decoration: BoxDecoration(
           color: AppColors.cardSurface,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+          border: Border.all(
+            color: AppColors.accentGold.withOpacity(0.2),
+            width: 0.8,
+          ),
           boxShadow: const [
-            BoxShadow(color: AppColors.shadowSoft, blurRadius: 20, offset: Offset(0, 8)),
+            BoxShadow(color: AppColors.shadowSoft, blurRadius: 24, offset: Offset(0, 10)),
+            BoxShadow(
+              color: AppColors.glowPurple,
+              blurRadius: 40,
+              offset: Offset(0, 16),
+              spreadRadius: -6,
+            ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome back', style: AppTextStyles.sectionTitle.copyWith(fontSize: 22)),
+            Text('Welcome back', style: AppTextStyles.screenTitle),
             const SizedBox(height: 2),
             Text('Sign in to your account', style: AppTextStyles.rowSubtitle),
             const SizedBox(height: AppSpacing.xl),
@@ -170,12 +229,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               children: [
                 GestureDetector(
                   onTap: () => setState(() => _agreed = !_agreed),
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
                       color: _agreed ? AppColors.primaryPurple : Colors.transparent,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                         color: _agreed ? AppColors.primaryPurple : AppColors.dividerColor,
                         width: 1.5,
@@ -234,10 +294,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           child: TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            style: AppTextStyles.rowTitle.copyWith(fontSize: 15),
+            style: AppTextStyles.fieldInput,
             decoration: InputDecoration(
               hintText: 'ada.chukwu@zencash.app',
-              hintStyle: AppTextStyles.rowSubtitle,
+              hintStyle: AppTextStyles.fieldHint,
               prefixIcon: const Icon(Iconsax.sms, size: 18, color: AppColors.textSecondary),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
@@ -267,10 +327,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           child: TextField(
             controller: _passwordController,
             obscureText: _obscurePassword,
-            style: AppTextStyles.rowTitle.copyWith(fontSize: 15),
+            style: AppTextStyles.fieldInput,
             decoration: InputDecoration(
               hintText: 'Enter your password',
-              hintStyle: AppTextStyles.rowSubtitle,
+              hintStyle: AppTextStyles.fieldHint,
               prefixIcon: const Icon(Iconsax.lock, size: 18, color: AppColors.textSecondary),
               suffixIcon: GestureDetector(
                 onTap: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -300,7 +360,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           child: Text(
             'Forgot password?',
             style: AppTextStyles.rowValueMuted.copyWith(
-              color: AppColors.primaryPurple,
+              color: AppColors.primaryPurpleLight,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -311,14 +371,16 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           children: [
             Text(
               "Don't have an account? ",
-              style: AppTextStyles.rowSubtitle,
+              style: AppTextStyles.rowSubtitleLight.copyWith(
+                color: AppColors.textOnDarkMuted,
+              ),
             ),
             GestureDetector(
               onTap: () {},
               child: Text(
                 'Sign up',
-                style: AppTextStyles.rowSubtitle.copyWith(
-                  color: AppColors.primaryPurple,
+                style: AppTextStyles.rowSubtitleLight.copyWith(
+                  color: AppColors.accentGoldLight,
                   fontWeight: FontWeight.w700,
                 ),
               ),

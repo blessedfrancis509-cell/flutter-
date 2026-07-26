@@ -2,106 +2,151 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
-/// Typography scale for ZenCash — built on Google Fonts' Inter family.
+/// Typography scale for ZenCash.
+///
+/// Uses **Inter** via Google Fonts. Every weight variant is defined as a
+/// static getter so call-sites stay concise and consistent.
 class AppTextStyles {
   AppTextStyles._();
 
-  static TextStyle _inter({
-    required double size,
-    required FontWeight weight,
-    required Color color,
-    double? letterSpacing,
-    double? height,
-  }) {
-    return GoogleFonts.inter(
-      fontSize: size,
-      fontWeight: weight,
-      color: color,
-      letterSpacing: letterSpacing,
-      height: height,
-    );
-  }
-
-  // App bar
-  static TextStyle logo = _inter(
-    size: 20,
-    weight: FontWeight.w800,
-    color: AppColors.textOnDark,
-    letterSpacing: -0.2,
-  );
-
-  // Balance card
-  static TextStyle balanceLabel = _inter(
-    size: 12.5,
-    weight: FontWeight.w600,
-    color: AppColors.textOnDarkMuted,
-    letterSpacing: 1.1,
-  );
-
-  static TextStyle balanceAmount = _inter(
-    size: 38,
-    weight: FontWeight.w800,
+  // ── Logo ───────────────────────────────────────────────────────────
+  static TextStyle logo = GoogleFonts.inter(
+    fontSize: 28,
+    fontWeight: FontWeight.w800,
     color: AppColors.textOnDark,
     letterSpacing: -0.5,
   );
 
-  // Quick action labels
-  static TextStyle quickActionLabel = _inter(
-    size: 12.5,
-    weight: FontWeight.w600,
-    color: AppColors.textOnDarkMuted,
+  // ── Screen titles ──────────────────────────────────────────────────
+  static TextStyle screenTitle = GoogleFonts.inter(
+    fontSize: 22,
+    fontWeight: FontWeight.w800,
+    color: AppColors.textPrimary,
+    letterSpacing: -0.4,
   );
 
-  // Section titles
-  static TextStyle sectionTitle = _inter(
-    size: 17,
-    weight: FontWeight.w700,
+  static TextStyle screenTitleLight = GoogleFonts.inter(
+    fontSize: 22,
+    fontWeight: FontWeight.w800,
+    color: AppColors.textOnDark,
+    letterSpacing: -0.4,
+  );
+
+  // ── Section headings ───────────────────────────────────────────────
+  static TextStyle sectionTitle = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
     letterSpacing: -0.2,
   );
 
-  // Service / account rows
-  static TextStyle rowTitle = _inter(
-    size: 14.5,
-    weight: FontWeight.w700,
-    color: AppColors.textPrimary,
-  );
-
-  static TextStyle rowSubtitle = _inter(
-    size: 13,
-    weight: FontWeight.w500,
-    color: AppColors.textSecondary,
-  );
-
-  static TextStyle rowValue = _inter(
-    size: 13.5,
-    weight: FontWeight.w700,
-    color: AppColors.textPrimary,
-  );
-
-  static TextStyle rowValueMuted = _inter(
-    size: 12.5,
-    weight: FontWeight.w600,
-    color: AppColors.textSecondary,
-  );
-
-  // Bottom nav
-  static TextStyle navLabelActive = _inter(
-    size: 11,
-    weight: FontWeight.w700,
-    color: AppColors.navActive,
-  );
-
-  static TextStyle navLabelInactive = _inter(
-    size: 11,
-    weight: FontWeight.w600,
-    color: AppColors.navInactive,
-  );
-
-  // Status bar time
-  static TextStyle statusBarTime = _inter(
-    size: 14,
-    weight: FontWeight.w700,
+  static TextStyle sectionTitleLight = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
     color: AppColors.textOnDark,
+    letterSpacing: -0.2,
+  );
+
+  // ── Row titles ─────────────────────────────────────────────────────
+  static TextStyle rowTitle = GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
+  static TextStyle rowTitleLight = GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textOnDark,
+  );
+
+  // ── Row subtitles / meta ───────────────────────────────────────────
+  static TextStyle rowSubtitle = GoogleFonts.inter(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
+  );
+
+  static TextStyle rowSubtitleLight = GoogleFonts.inter(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textOnDarkMuted,
+  );
+
+  // ── Row values (right-aligned amounts) ─────────────────────────────
+  static TextStyle rowValue = GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+  );
+
+  static TextStyle rowValueMuted = GoogleFonts.inter(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textMuted,
+  );
+
+  // ── Balance / big numbers ──────────────────────────────────────────
+  static TextStyle balanceLarge = GoogleFonts.inter(
+    fontSize: 34,
+    fontWeight: FontWeight.w800,
+    color: AppColors.textOnDark,
+    letterSpacing: -1.0,
+    height: 1.1,
+  );
+
+  static TextStyle balanceLabel = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textOnDarkMuted,
+    letterSpacing: 0.6,
+  );
+
+  // ── Quick-action labels ────────────────────────────────────────────
+  static TextStyle quickActionLabel = GoogleFonts.inter(
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textSecondary,
+  );
+
+  // ── Buttons ────────────────────────────────────────────────────────
+  static TextStyle buttonPrimary = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textOnDark,
+    letterSpacing: 0.2,
+  );
+
+  static TextStyle buttonSecondary = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: AppColors.primaryPurple,
+    letterSpacing: 0.2,
+  );
+
+  // ── Chips / tags ───────────────────────────────────────────────────
+  static TextStyle chip = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primaryPurple,
+  );
+
+  // ── Hints inside text fields ───────────────────────────────────────
+  static TextStyle fieldHint = GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textMuted,
+  );
+
+  static TextStyle fieldInput = GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+  );
+
+  // ── Tab labels ─────────────────────────────────────────────────────
+  static TextStyle tabLabel = GoogleFonts.inter(
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
   );
 }

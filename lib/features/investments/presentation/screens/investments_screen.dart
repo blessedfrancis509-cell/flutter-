@@ -51,7 +51,7 @@ class InvestmentsScreen extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     '₦${_formatMoney(total)}',
-                    style: AppTextStyles.balanceAmount.copyWith(fontSize: 30),
+                    style: AppTextStyles.balanceLarge.copyWith(fontSize: 30),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Row(

@@ -6,11 +6,7 @@ import 'balance_card.dart';
 import 'quick_actions_row.dart';
 import 'accounts_services_card.dart';
 
-/// The "Home" tab content: purple gradient header block containing the
-/// app bar, balance card and quick actions, followed by a scrollable
-/// white "My Accounts & Services" card. Extracted from [HomeScreen] so it
-/// can sit inside the tabbed [IndexedStack] alongside the other bottom-nav
-/// destinations.
+/// Home tab with a cinematic gradient header and staggered entrance animations.
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
 
@@ -18,14 +14,34 @@ class HomeTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Purple gradient header block
+        // Cinematic gradient header — taller for a grander feel
         Container(
-          height: 340,
+          height: 370,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: AppColors.headerGradient,
+            ),
+          ),
+        ),
+
+        // Subtle radial glow behind the balance card area
+        Positioned(
+          top: 120,
+          left: 0,
+          right: 0,
+          height: 200,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment.topCenter,
+                radius: 0.9,
+                colors: [
+                  AppColors.accentViolet.withOpacity(0.12),
+                  Colors.transparent,
+                ],
+              ),
             ),
           ),
         ),
@@ -39,7 +55,7 @@ class HomeTab extends StatelessWidget {
               const SizedBox(height: AppSpacing.xl),
               _AnimatedEntrance(
                 delay: 0,
-                child: const BalanceCard(amount: 2450.75),
+                child: const BalanceCard(),
               ),
               const SizedBox(height: AppSpacing.xl),
               _AnimatedEntrance(
@@ -65,8 +81,7 @@ class HomeTab extends StatelessWidget {
   }
 }
 
-/// Small fade + slide-up entrance animation used to stagger the page's
-/// primary sections on first build.
+/// Staggered fade + slide-up entrance animation.
 class _AnimatedEntrance extends StatefulWidget {
   final Widget child;
   final int delay;

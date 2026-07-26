@@ -4,12 +4,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../data/models/account_service_model.dart';
 
-/// Bottom navigation bar with Home / Transfers / Payments / Cards /
-/// Investments — active item shown in solid purple with bold icon.
-///
-/// Externally controlled: the parent owns the selected tab index (so it
-/// can drive an [IndexedStack] of the corresponding screens) and passes
-/// it in via [currentIndex] / [onTap].
+/// Premium bottom navigation bar with pill-shaped active indicator and
+/// subtle glow effect on the selected item.
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -20,9 +16,6 @@ class BottomNavBar extends StatelessWidget {
     required this.onTap,
   });
 
-  // NOTE: We intentionally reuse the same glyph for `icon` and `activeIcon`
-  // and differentiate the selected state purely by colour (matching the
-  // reference design, where the active tab is simply tinted purple).
   static const _items = [
     NavItemModel(icon: Iconsax.home_2, activeIcon: Iconsax.home_2, label: 'Home'),
     NavItemModel(
@@ -50,16 +43,16 @@ class BottomNavBar extends StatelessWidget {
         color: AppColors.navBackground,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
+            color: AppColors.shadowStrong.withOpacity(0.4),
+            blurRadius: 24,
+            offset: const Offset(0, -6),
           ),
         ],
       ),
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(_items.length, (i) {
@@ -95,23 +88,31 @@ class _NavButton extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOut,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primaryPurple.withOpacity(0.08) : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              selected ? item.activeIcon : item.icon,
-              size: 22,
-              color: selected ? AppColors.navActive : AppColors.navInactive,
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: Icon(
+                selected ? item.activeIcon : item.icon,
+                key: ValueKey(selected),
+                size: selected ? 23 : 21,
+                color: selected ? AppColors.navActive : AppColors.navInactive,
+              ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
             Text(
               item.label,
               style: selected
-                  ? AppTextStyles.navLabelActive
-                  : AppTextStyles.navLabelInactive,
+                  ? AppTextStyles.tabLabel.copyWith(color: AppColors.navActive)
+                  : AppTextStyles.tabLabel.copyWith(color: AppColors.navInactive),
             ),
           ],
         ),

@@ -9,9 +9,8 @@ import '../../../transfers/presentation/screens/scan_qr_screen.dart';
 import '../../../payments/presentation/screens/pay_bills_screen.dart';
 import '../../data/models/account_service_model.dart';
 
-/// Row of four quick-action buttons under the balance card.
-/// "Send" is highlighted in green (primary); the rest are glass buttons.
-/// Each button pushes its corresponding flow screen.
+/// Row of four quick-action buttons. "Send" is highlighted in green;
+/// the rest are frosted glass buttons. Larger, glowier, more premium.
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});
 
@@ -70,7 +69,7 @@ class _QuickActionButton extends StatefulWidget {
 class _QuickActionButtonState extends State<_QuickActionButton> {
   double _scale = 1.0;
 
-  void _setPressed(bool pressed) => setState(() => _scale = pressed ? 0.92 : 1.0);
+  void _setPressed(bool pressed) => setState(() => _scale = pressed ? 0.90 : 1.0);
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +87,8 @@ class _QuickActionButtonState extends State<_QuickActionButton> {
         child: Column(
           children: [
             Container(
-              width: 54,
-              height: 54,
+              width: 58,
+              height: 58,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -107,17 +106,29 @@ class _QuickActionButtonState extends State<_QuickActionButton> {
                 boxShadow: isPrimary
                     ? [
                         BoxShadow(
-                          color: AppColors.sendGreen.withOpacity(0.45),
-                          blurRadius: 16,
-                          offset: const Offset(0, 6),
+                          color: AppColors.sendGreen.withOpacity(0.50),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                        BoxShadow(
+                          color: AppColors.sendGreen.withOpacity(0.15),
+                          blurRadius: 36,
+                          offset: const Offset(0, 12),
+                          spreadRadius: -4,
                         ),
                       ]
-                    : null,
+                    : [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.06),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
               ),
               child: Icon(
                 widget.model.icon,
                 color: Colors.white,
-                size: 22,
+                size: 23,
               ),
             ),
             const SizedBox(height: AppSpacing.xs),

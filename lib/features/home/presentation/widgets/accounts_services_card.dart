@@ -10,27 +10,25 @@ import '../../data/models/account_service_model.dart';
 import '../screens/account_details_screen.dart';
 import 'account_service_tile.dart';
 
-/// White rounded card titled "My Accounts & Services" holding a list of
-/// [AccountServiceTile]s. Sits below the balance card / quick actions and
-/// scrolls with the rest of the page content. Each row navigates to its
-/// corresponding detail screen.
+/// Premium white card titled "My Accounts & Services" with a subtle
+/// gradient top border and refined shadow.
 class AccountsServicesCard extends StatelessWidget {
   const AccountsServicesCard({super.key});
 
   static final List<AccountServiceModel> _items = [
     AccountServiceModel(
       icon: Iconsax.bank,
-      iconBackground: AppColors.zenithRed.withOpacity(0.12),
+      iconBackground: AppColors.zenithRed.withOpacity(0.10),
       iconColor: AppColors.zenithRed,
       title: 'Zenith Accounts',
       lines: const [
-        AccountLine(label: 'Checking', value: '₦2,450.75'),
-        AccountLine(label: 'Savings', value: '₦2,450.30'),
+        AccountLine(label: 'Checking', value: '\u20A62,450.75'),
+        AccountLine(label: 'Savings', value: '\u20A62,450.30'),
       ],
     ),
     AccountServiceModel(
       icon: Iconsax.card,
-      iconBackground: AppColors.cardsPurple.withOpacity(0.12),
+      iconBackground: AppColors.cardsPurple.withOpacity(0.10),
       iconColor: AppColors.cardsPurple,
       title: 'Zenith Cards',
       trailingLabel: 'Linked debit cards',
@@ -38,13 +36,13 @@ class AccountsServicesCard extends StatelessWidget {
     ),
     AccountServiceModel(
       icon: Iconsax.chart_2,
-      iconBackground: AppColors.investGreen.withOpacity(0.12),
+      iconBackground: AppColors.investGreen.withOpacity(0.10),
       iconColor: AppColors.investGreen,
       title: 'Investments',
     ),
     AccountServiceModel(
       icon: Iconsax.briefcase,
-      iconBackground: AppColors.businessNavy.withOpacity(0.10),
+      iconBackground: AppColors.businessNavy.withOpacity(0.08),
       iconColor: AppColors.businessNavy,
       title: 'Business Banking',
     ),
@@ -75,18 +73,38 @@ class AccountsServicesCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
         boxShadow: const [
           BoxShadow(
             color: AppColors.shadowSoft,
-            blurRadius: 24,
-            offset: Offset(0, 10),
+            blurRadius: 28,
+            offset: Offset(0, 12),
+          ),
+          BoxShadow(
+            color: AppColors.glowPurple,
+            blurRadius: 48,
+            offset: Offset(0, 18),
+            spreadRadius: -8,
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Gradient top accent bar
+          Container(
+            height: 3,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primaryPurple,
+                  AppColors.accentViolet,
+                  AppColors.accentGold,
+                ],
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(
               AppSpacing.lg,

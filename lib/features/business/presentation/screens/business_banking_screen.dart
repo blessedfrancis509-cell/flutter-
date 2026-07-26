@@ -39,7 +39,7 @@ class BusinessBankingScreen extends StatelessWidget {
                 children: [
                   Text('BUSINESS BALANCE', style: AppTextStyles.balanceLabel),
                   const SizedBox(height: AppSpacing.xs),
-                  Text('₦1,284,600.00', style: AppTextStyles.balanceAmount.copyWith(fontSize: 28)),
+                  Text('₦1,284,600.00', style: AppTextStyles.balanceLarge.copyWith(fontSize: 28)),
                   const SizedBox(height: AppSpacing.xs),
                   Text('Zenith Business • Acct ••4930', style: AppTextStyles.rowValueMuted.copyWith(color: Colors.white70)),
                 ],

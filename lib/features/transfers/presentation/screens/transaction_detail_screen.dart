@@ -60,7 +60,7 @@ class TransactionDetailScreen extends StatelessWidget {
             Center(
               child: Text(
                 '$sign₦$amountStr',
-                style: AppTextStyles.balanceAmount.copyWith(
+                style: AppTextStyles.balanceLarge.copyWith(
                   fontSize: 32,
                   color: isCredit ? AppColors.investGreen : AppColors.textPrimary,
                 ),

@@ -36,14 +36,17 @@ class SecondaryAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: GestureDetector(
           onTap: () => Navigator.of(context).maybePop(),
           child: Container(
-            width: 38,
-            height: 38,
+            width: 40,
+            height: 40,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: foreground == AppColors.textPrimary
                   ? AppColors.cardSurfaceAlt
                   : Colors.white.withOpacity(0.14),
               shape: BoxShape.circle,
+              border: foreground == AppColors.textPrimary
+                  ? Border.all(color: AppColors.dividerColor, width: 1)
+                  : null,
             ),
             child: Icon(Iconsax.arrow_left, size: 18, color: foreground),
           ),

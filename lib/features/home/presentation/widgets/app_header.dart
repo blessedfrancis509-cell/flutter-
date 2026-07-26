@@ -6,10 +6,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../screens/notifications_screen.dart';
 import '../screens/profile_screen.dart';
 
-/// Top bar: "Z ZenCash" logo on the left, search / bell / profile on the
-/// right. Sits directly on the purple header gradient (transparent bg).
-/// The notification and profile icons push their respective screens; the
-/// search icon opens an inline search field via a bottom sheet.
+/// Premium top bar with Z logo, search / bell / profile icons.
 class AppHeader extends StatelessWidget {
   const AppHeader({super.key});
 
@@ -23,23 +20,30 @@ class AppHeader extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 30,
-                height: 30,
+                width: 32,
+                height: 32,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppRadius.xs),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [AppColors.sendGreen, AppColors.accentViolet],
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.sendGreen.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: const Text(
                   'Z',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
-                    fontSize: 16,
+                    fontSize: 17,
                   ),
                 ),
               ),
@@ -86,12 +90,23 @@ class AppHeader extends StatelessWidget {
           padding: const EdgeInsets.all(AppSpacing.lg),
           decoration: const BoxDecoration(
             color: AppColors.cardSurface,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.lg)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.dividerColor,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
               Text('Search ZenCash', style: AppTextStyles.sectionTitle),
               const SizedBox(height: AppSpacing.md),
               Container(
@@ -103,7 +118,7 @@ class AppHeader extends StatelessWidget {
                 child: const TextField(
                   autofocus: true,
                   decoration: InputDecoration(
-                    hintText: 'Search transactions, contacts, billers…',
+                    hintText: 'Search transactions, contacts, billers...',
                     prefixIcon: Icon(Iconsax.search_normal, size: 18),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(
@@ -145,24 +160,41 @@ class _HeaderIconButtonState extends State<_HeaderIconButton> {
       child: AnimatedScale(
         scale: _scale,
         duration: const Duration(milliseconds: 100),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Icon(widget.icon, color: AppColors.textOnDark, size: 22),
-            if (widget.showDot)
-              Positioned(
-                right: -1,
-                top: -1,
-                child: Container(
-                  width: 7,
-                  height: 7,
-                  decoration: const BoxDecoration(
-                    color: AppColors.sendGreen,
-                    shape: BoxShape.circle,
+        child: Container(
+          width: 36,
+          height: 36,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.10),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white.withOpacity(0.12)),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Icon(widget.icon, color: AppColors.textOnDark, size: 19),
+              if (widget.showDot)
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      color: AppColors.sendGreen,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.sendGreen,
+                          blurRadius: 4,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
