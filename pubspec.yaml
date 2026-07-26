@@ -11,21 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # Icons
   cupertino_icons: ^1.0.8
   iconsax: ^0.0.8
-
-  # Fonts
   google_fonts: ^6.2.1
-
-  # Vector graphics
-  flutter_svg: ^2.0.10+1
-
-  # Glassmorphism / blur effects
-  glassmorphism: ^3.0.0
-
-  # Subtle UI animations
-  flutter_animate: ^4.5.0
 
 dev_dependencies:
   flutter_test:
