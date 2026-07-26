@@ -2,9 +2,6 @@
   command = "bash build.sh"
   publish = "build/web"
 
-[build.environment]
-  FLUTTER_ROOT = "/opt/flutter"
-
 [[redirects]]
   from = "/*"
   to = "/index.html"

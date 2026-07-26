@@ -1,26 +1,19 @@
 #!/bin/bash
 set -e
 
-# Use Netlify cache directory for Flutter SDK persistence
-FLUTTER_HOME="${NETLIFY_CACHE_DIR}/flutter-sdk"
+FLUTTER_HOME="$HOME/flutter-sdk"
 
 if [ ! -d "$FLUTTER_HOME" ]; then
-  echo "=== Cloning Flutter SDK (cached) ==="
+  echo "=== Cloning Flutter SDK ==="
   git clone https://github.com/flutter/flutter.git "$FLUTTER_HOME" --depth 1 -b stable
 else
   echo "=== Using cached Flutter SDK ==="
-  cd "$FLUTTER_HOME"
-  git pull --ff-only || true
-  cd -
 fi
 
 export PATH="$FLUTTER_HOME/bin:$PATH"
 
 echo "=== Flutter version ==="
 flutter --version
-
-echo "=== Cleaning previous builds ==="
-flutter clean || true
 
 echo "=== Getting dependencies ==="
 flutter pub get
