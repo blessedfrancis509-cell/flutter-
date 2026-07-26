@@ -9,8 +9,7 @@ import '../../../transfers/presentation/screens/scan_qr_screen.dart';
 import '../../../payments/presentation/screens/pay_bills_screen.dart';
 import '../../data/models/account_service_model.dart';
 
-/// Row of four quick-action buttons. "Send" is highlighted in green;
-/// the rest are frosted glass buttons. Larger, glowier, more premium.
+/// Row of four quick-action buttons — white background, simple icons.
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});
 
@@ -47,7 +46,7 @@ class QuickActionsRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: _actions
-            .map((a) => _QuickActionButton(
+            .map((a) => _QuickActionItem(
                   model: a,
                   onTap: () => _handleTap(context, a.label),
                 ))
@@ -57,19 +56,19 @@ class QuickActionsRow extends StatelessWidget {
   }
 }
 
-class _QuickActionButton extends StatefulWidget {
+class _QuickActionItem extends StatefulWidget {
   final QuickActionModel model;
   final VoidCallback onTap;
-  const _QuickActionButton({required this.model, required this.onTap});
+  const _QuickActionItem({required this.model, required this.onTap});
 
   @override
-  State<_QuickActionButton> createState() => _QuickActionButtonState();
+  State<_QuickActionItem> createState() => _QuickActionItemState();
 }
 
-class _QuickActionButtonState extends State<_QuickActionButton> {
+class _QuickActionItemState extends State<_QuickActionItem> {
   double _scale = 1.0;
 
-  void _setPressed(bool pressed) => setState(() => _scale = pressed ? 0.90 : 1.0);
+  void _setPressed(bool pressed) => setState(() => _scale = pressed ? 0.92 : 1.0);
 
   @override
   Widget build(BuildContext context) {
@@ -87,52 +86,39 @@ class _QuickActionButtonState extends State<_QuickActionButton> {
         child: Column(
           children: [
             Container(
-              width: 58,
-              height: 58,
+              width: 52,
+              height: 52,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: isPrimary
-                    ? const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [AppColors.sendGreen, AppColors.sendGreenDark],
-                      )
-                    : null,
-                color: isPrimary ? null : AppColors.glassButtonFill,
-                border: isPrimary
-                    ? null
-                    : Border.all(color: AppColors.glassButtonBorder, width: 1),
+                color: isPrimary
+                    ? AppColors.primaryPurple
+                    : AppColors.cardSurfaceAlt,
+                borderRadius: BorderRadius.circular(14),
                 boxShadow: isPrimary
                     ? [
                         BoxShadow(
-                          color: AppColors.sendGreen.withOpacity(0.50),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                        BoxShadow(
-                          color: AppColors.sendGreen.withOpacity(0.15),
-                          blurRadius: 36,
-                          offset: const Offset(0, 12),
-                          spreadRadius: -4,
+                          color: AppColors.primaryPurple.withOpacity(0.25),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
                       ]
-                    : [
-                        BoxShadow(
-                          color: Colors.white.withOpacity(0.06),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                    : null,
               ),
               child: Icon(
                 widget.model.icon,
-                color: Colors.white,
-                size: 23,
+                color: isPrimary ? Colors.white : AppColors.primaryPurple,
+                size: 22,
               ),
             ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(widget.model.label, style: AppTextStyles.quickActionLabel),
+            const SizedBox(height: 8),
+            Text(
+              widget.model.label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textSecondary,
+              ),
+            ),
           ],
         ),
       ),

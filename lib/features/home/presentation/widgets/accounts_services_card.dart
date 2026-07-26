@@ -10,15 +10,14 @@ import '../../data/models/account_service_model.dart';
 import '../screens/account_details_screen.dart';
 import 'account_service_tile.dart';
 
-/// Premium white card titled "My Accounts & Services" with a subtle
-/// gradient top border and refined shadow.
+/// Clean white card for "My Accounts & Services" — simple shadow, no extras.
 class AccountsServicesCard extends StatelessWidget {
   const AccountsServicesCard({super.key});
 
   static final List<AccountServiceModel> _items = [
     AccountServiceModel(
       icon: Iconsax.bank,
-      iconBackground: AppColors.zenithRed.withOpacity(0.10),
+      iconBackground: const Color(0xFFFEE2E2),
       iconColor: AppColors.zenithRed,
       title: 'Zenith Accounts',
       lines: const [
@@ -28,7 +27,7 @@ class AccountsServicesCard extends StatelessWidget {
     ),
     AccountServiceModel(
       icon: Iconsax.card,
-      iconBackground: AppColors.cardsPurple.withOpacity(0.10),
+      iconBackground: const Color(0xFFEDE9FE),
       iconColor: AppColors.cardsPurple,
       title: 'Zenith Cards',
       trailingLabel: 'Linked debit cards',
@@ -36,13 +35,13 @@ class AccountsServicesCard extends StatelessWidget {
     ),
     AccountServiceModel(
       icon: Iconsax.chart_2,
-      iconBackground: AppColors.investGreen.withOpacity(0.10),
+      iconBackground: const Color(0xFFDCFCE7),
       iconColor: AppColors.investGreen,
       title: 'Investments',
     ),
     AccountServiceModel(
       icon: Iconsax.briefcase,
-      iconBackground: AppColors.businessNavy.withOpacity(0.08),
+      iconBackground: const Color(0xFFF1F5F9),
       iconColor: AppColors.businessNavy,
       title: 'Business Banking',
     ),
@@ -73,45 +72,20 @@ class AccountsServicesCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: const [
           BoxShadow(
             color: AppColors.shadowSoft,
-            blurRadius: 28,
-            offset: Offset(0, 12),
-          ),
-          BoxShadow(
-            color: AppColors.glowPurple,
-            blurRadius: 48,
-            offset: Offset(0, 18),
-            spreadRadius: -8,
+            blurRadius: 12,
+            offset: Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Gradient top accent bar
-          Container(
-            height: 3,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.primaryPurple,
-                  AppColors.accentViolet,
-                  AppColors.accentGold,
-                ],
-              ),
-            ),
-          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.lg,
-              AppSpacing.lg,
-              AppSpacing.sm,
-            ),
+            padding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
             child: Text('My Accounts & Services', style: AppTextStyles.sectionTitle),
           ),
           for (int i = 0; i < _items.length; i++)
@@ -120,7 +94,7 @@ class AccountsServicesCard extends StatelessWidget {
               showDivider: i != _items.length - 1,
               onTap: () => _handleTap(context, _items[i].title),
             ),
-          const SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: 6),
         ],
       ),
     );

@@ -4,8 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../data/models/account_service_model.dart';
 
-/// Premium bottom navigation bar with pill-shaped active indicator and
-/// subtle glow effect on the selected item.
+/// Clean bottom navigation bar — simple icons, purple active indicator dot.
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -39,28 +38,22 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.navBackground,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadowStrong.withOpacity(0.4),
-            blurRadius: 24,
-            offset: const Offset(0, -6),
-          ),
-        ],
+        border: Border(
+          top: BorderSide(color: AppColors.dividerColor, width: 0.5),
+        ),
       ),
       child: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: SizedBox(
+          height: 60,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(_items.length, (i) {
-              final selected = i == currentIndex;
-              final item = _items[i];
               return _NavButton(
-                item: item,
-                selected: selected,
+                item: _items[i],
+                selected: i == currentIndex,
                 onTap: () => onTap(i),
               );
             }),
@@ -87,32 +80,24 @@ class _NavButton extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primaryPurple.withOpacity(0.08) : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppRadius.pill),
-        ),
+      child: SizedBox(
+        width: 60,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: Icon(
-                selected ? item.activeIcon : item.icon,
-                key: ValueKey(selected),
-                size: selected ? 23 : 21,
-                color: selected ? AppColors.navActive : AppColors.navInactive,
-              ),
+            Icon(
+              selected ? item.activeIcon : item.icon,
+              size: 22,
+              color: selected ? AppColors.navActive : AppColors.navInactive,
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 4),
             Text(
               item.label,
-              style: selected
-                  ? AppTextStyles.tabLabel.copyWith(color: AppColors.navActive)
-                  : AppTextStyles.tabLabel.copyWith(color: AppColors.navInactive),
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                color: selected ? AppColors.navActive : AppColors.navInactive,
+              ),
             ),
           ],
         ),

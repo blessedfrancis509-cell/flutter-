@@ -3,13 +3,10 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_constants.dart';
-import 'balance_card_painter.dart';
 
-/// Premium glassmorphic balance card with metallic shimmer animation.
-///
-/// Uses [CustomPaint] with [BalanceCardPainter] for layered chrome effects
-/// and wraps the content with subtle transparency.
-class BalanceCard extends StatefulWidget {
+/// Clean, modern balance card — solid gradient, no effects.
+/// Looks like a real bank card (Revolut / Monzo / Kuda style).
+class BalanceCard extends StatelessWidget {
   final String balance;
   final String label;
   final String accountNumber;
@@ -22,81 +19,41 @@ class BalanceCard extends StatefulWidget {
   });
 
   @override
-  State<BalanceCard> createState() => _BalanceCardState();
-}
-
-class _BalanceCardState extends State<BalanceCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _shimmerCtrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _shimmerCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2800),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _shimmerCtrl.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-      child: AnimatedBuilder(
-        animation: _shimmerCtrl,
-        builder: (context, _) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppRadius.xl),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppColors.shadowStrong,
-                  blurRadius: 28,
-                  offset: Offset(0, 12),
-                ),
-                BoxShadow(
-                  color: AppColors.glowPurple,
-                  blurRadius: 48,
-                  offset: Offset(0, 16),
-                  spreadRadius: -4,
-                ),
-              ],
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF6D28D9),
+              Color(0xFF4C1D95),
+              Color(0xFF3B0F7A),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primaryPurple.withOpacity(0.30),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.xl),
-              child: CustomPaint(
-                painter: BalanceCardPainter(animation: _shimmerCtrl),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 22),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AppColors.balanceCardBorder.withOpacity(0.25),
-                      width: 0.8,
-                    ),
-                    borderRadius: BorderRadius.circular(AppRadius.xl),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildTopRow(),
-                      const SizedBox(height: 16),
-                      _buildBalanceRow(),
-                      const SizedBox(height: 18),
-                      _buildBottomRow(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTopRow(),
+            const SizedBox(height: 20),
+            _buildBalance(),
+            const SizedBox(height: 20),
+            _buildBottomRow(),
+          ],
+        ),
       ),
     );
   }
@@ -104,76 +61,58 @@ class _BalanceCardState extends State<BalanceCard>
   Widget _buildTopRow() {
     return Row(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(AppRadius.pill),
-            border: Border.all(color: Colors.white.withOpacity(0.15)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 7,
-                height: 7,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.sendGreen,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.sendGreen,
-                      blurRadius: 6,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                widget.label,
-                style: AppTextStyles.balanceLabel.copyWith(
-                  color: AppColors.textOnDarkMuted,
-                ),
-              ),
-            ],
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: Color(0xCCFFFFFF),
           ),
         ),
         const Spacer(),
-        Icon(
+        const Icon(
           Iconsax.eye_slash,
-          size: 16,
-          color: AppColors.textOnDarkMuted,
+          size: 18,
+          color: Color(0xCCFFFFFF),
         ),
       ],
     );
   }
 
-  Widget _buildBalanceRow() {
+  Widget _buildBalance() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(widget.balance, style: AppTextStyles.balanceLarge),
-        const SizedBox(width: 6),
+        Text(
+          balance,
+          style: const TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+            letterSpacing: -1,
+            height: 1.1,
+          ),
+        ),
+        const SizedBox(width: 8),
         Padding(
-          padding: const EdgeInsets.only(bottom: 5),
+          padding: const EdgeInsets.only(bottom: 4),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.sendGreen.withOpacity(0.18),
-              borderRadius: BorderRadius.circular(AppRadius.pill),
+              color: const Color(0x33FFFFFF),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Iconsax.arrow_up_3, size: 11, color: AppColors.sendGreen),
-                SizedBox(width: 2),
+                Icon(Iconsax.arrow_up_3, size: 12, color: Color(0xFF86EFAC)),
+                SizedBox(width: 3),
                 Text(
                   '12.5%',
                   style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.sendGreen,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF86EFAC),
                   ),
                 ),
               ],
@@ -187,40 +126,14 @@ class _BalanceCardState extends State<BalanceCard>
   Widget _buildBottomRow() {
     return Row(
       children: [
-        Icon(Iconsax.card, size: 14, color: AppColors.textOnDarkFaint),
+        const Icon(Iconsax.card, size: 16, color: Color(0x99FFFFFF)),
         const SizedBox(width: 6),
         Text(
-          'Zenith Savings  ${widget.accountNumber}',
-          style: AppTextStyles.rowSubtitleLight.copyWith(
-            color: AppColors.textOnDarkFaint,
-            fontSize: 12,
-          ),
-        ),
-        const Spacer(),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.accentGold.withOpacity(0.18),
-            borderRadius: BorderRadius.circular(AppRadius.pill),
-            border: Border.all(
-              color: AppColors.accentGold.withOpacity(0.25),
-            ),
-          ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Iconsax.star_1, size: 10, color: AppColors.accentGold),
-              SizedBox(width: 3),
-              Text(
-                'Premium',
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.accentGold,
-                  letterSpacing: 0.4,
-                ),
-              ),
-            ],
+          'Zenith Savings  $accountNumber',
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
+            color: Color(0x99FFFFFF),
           ),
         ),
       ],
